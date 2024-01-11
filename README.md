@@ -1,68 +1,71 @@
-# Floxyswap Smart Contract
+# EthToFxyExchange Smart Contract
 
 # Overview
 
-The Floxyswap Smart Contract facilitates decentralized token swapping between Ethereum (ETH), 
-Matic (Polygon), and other ERC20 tokens. The contract utilizes the OpenZeppelin library 
-for ERC20 interactions and is designed to provide a flexible and secure mechanism for users to 
-exchange various tokens on supported networks.
+The EthToFxyExchange smart contract is a simple decentralized exchange that allows users 
+to purchase FXY tokens using ETH. The contract is written in Solidity and utilizes the 
+OpenZeppelin ERC-20 implementation for the FXY token.
 
-# Features
+# Contract Details
 
-1. Token Swapping: Users can swap ERC20 tokens, ETH, or Matic for other specified tokens with predefined 
-conversion rates.
+* FXY Token Interface: The contract interacts with the FXY token through the IERC20 interface.
 
-2. Native Token Swapping: Users can exchange native tokens (ETH or Matic) for specified target tokens, 
-considering the chain on which the contract is deployed.
+* Owner: The contract owner has the authority to update the conversion rate and withdraw any ETH 
+sent to the contract.
 
-3. USDC to Token Swapping: Users can swap USDC tokens for other specified tokens based on predefined 
-conversion rates.
+* Conversion Rates: The contract maintains the current and last conversion rates for ETH to FXY. 
+The initial conversion rate is set during contract deployment.
 
-4. Conversion Rates: The contract allows the administrator to set and update conversion rates for ETH, Matic, 
-and other ERC20 tokens.
+* Events:
+   1. TokensPurchased: Emitted when users purchase FXY tokens by sending ETH to the contract.
+   2. TokensWithdrawn: Emitted when users withdraw ETH and corresponding FXY tokens based on a 
+   specified deposit index.
 
-5. Withdrawal Functions:
+# Functions
 
-* Withdraw Matic: The administrator can withdraw Matic from the contract.
-* Withdraw ETH: The administrator can withdraw ETH from the contract.
-* Withdraw ERC20 Tokens: Users can withdraw ERC20 tokens from the contract.
+ # constructor
 
-6. Admin Transfer: The contract allows for the transfer of administrative privileges to a new address.
+# Parameters:
 
-# Contract Initialization
-The contract is initialized with the following parameters:
+  * _fxyTokenAddress: Address of the FXY token contract.
+  * _initialConversionRate: Initial conversion rate for ETH to FXY.
 
-1. admin: Address of the contract administrator.
-2. token: Address of the main ERC20 token.
-3. token2: Address of the secondary ERC20 token.
-4. usdcToken: Address of the USDC token.
-5. matictoken: Address of the Matic token.
-6. conversionRates: Array of conversion rates for ETH, Matic, and other ERC20 tokens.
+# updateConversionRate
 
-# Usage
+# Parameters:
 
-# Token Swapping:
+* _newConversionRate: New conversion rate to be set.
+* Access: Only the contract owner can update the conversion rate.
 
-Use the swapTokens function to exchange ERC20 tokens for a specified target token.
+# receive
 
-# Native Token Swapping:
+# Fallback Function:
 
-Utilize swapnativeToToken to swap native tokens (ETH or Matic) for the specified target token.
+* Handles incoming ETH transactions.
+* Users can send ETH to the contract to purchase FXY tokens.
 
-# USDC to Token Swapping:
+# withdrawEthtofxy
 
-Use swapUsdcToToken to swap USDC tokens for the specified target token.
+ The withdrawEthtofxy function in the EthToFxyExchange smart contract allows users to withdraw 
+ ETH and corresponding FXY tokens based on a specified deposit index. Users must have previously 
+ deposited Matic to receive FXY tokens. This function calculates the equivalent ETH amount 
+ based on the current conversion rate and transfers the corresponding FXY tokens to the contract.
 
-# Setting Conversion Rates:
+# Parameters:
 
-The administrator can update conversion rates using the setConversionRates function.
+* user: User address initiating the withdrawal.
+* depositIndex: Index of the deposit used for calculating the withdrawal amount.
+* withdrawalAmount: Amount of ETH to withdraw.
 
-# Withdrawal:ONLY admin call this function
+# Access:
 
-1. Withdraw Matic using withdrawmatic.
-2. Withdraw ETH using withdraweth.
-3. Withdraw ERC20 tokens using withdrawToken.
+* The function is externally callable.
+* Only users (not the owner) can initiate ETH withdrawals based on their previous Matic 
+deposits.
 
-# Admin Transfer:
 
-The administrator can transfer administrative privileges to a new address using transferAdmin.
+# withdrawEth (Owner)
+
+# Access:
+Only the contract owner can withdraw any ETH sent to the contract.
+
